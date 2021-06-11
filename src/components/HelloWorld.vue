@@ -5,26 +5,22 @@
         <div class="container-sidestore">
           <div class="row">
             <br />
-            <div class="text-top">
-              <h2>ร้านหนังสือ “บ้านนายดิน” ได้ออกโปรโมทชั่น!!</h2>
-              <p>1.ซื้อเล่มไม่ซ้ำกัน 2 เล่ม ลด 10%</p>
-              <p>2.ซื้อเล่มไม่ซ้ำกัน 3 เล่ม ลด 20%</p>
-              <p>3.ซื้อเล่มไม่ซ้ำกัน 4 เล่ม ลด 30%</p>
-              <p>4.ซื้อเล่มไม่ซ้ำกัน 6 เล่ม ลด 50%</p>
-              <p>5.ซื้อเล่มไม่ซ้ำกัน 7 เล่ม ลด 60%</p>
+            <div
+              class="text-top"
+              style="color: white; background-color: darkblue"
+            >
+              <h2>ร้านหนังสือ “บ้านนายดิน”</h2>
             </div>
 
             <br />
             <div class="row" style="margin-bottom: 20px; margin-top: 20px">
               <h1 class="col-md-9" style="text-align: left">Store</h1>
               <div class="col-md-3">
-                <router-link to="/basket">
-                  <img
-                    src="cart.png"
-                    class="img-thumbnail"
-                    style="max-width: 15%"
-                  />
-                </router-link>
+                <img
+                  src="cart.png"
+                  class="img-thumbnail"
+                  style="max-width: 15%"
+                />
               </div>
             </div>
 
@@ -79,35 +75,48 @@
               name="แฮรี่พอตเตอร์กับ เครื่องรางยมภูติ"
               @buy="buyitem"
             ></bookstore>
-          </div>
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">id</th>
-                <th scope="col">name</th>
-                <th scope="col">price</th>
-                <th scope="col">count</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(item, index) in data" :key="index">
-                <td>{{ item.id }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.price }}</td>
-                <td>{{ item.count }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="row" style="text-align: start">
-            <div class="text-right col-md-12">
-              รวม {{ countAllBooks() }} เล่ม
-            </div>
-            <div class="text-right col-md-12">
-              ราคาร่วม {{ sumprice() }} บาท
-            </div>
-            <div class="text-right col-md-12">ส่วนลด {{ discount() }} บาท</div>
-            <div class="text-right col-md-12">
-              ร่วมสุทธิ {{ sumprice() - discount() }} บาท
+            <div class="container allprice" style="margin-top: 10%">
+              <div class="row table">
+                <h1
+                  class="col-md-6"
+                  style="text-align: initial; background: beige"
+                >
+                  ตระกร้าสินค้า
+                </h1>
+                <h1 class="col-md-6" style="mar">ราคาสินค้า</h1>
+                <table class="table col-md-6" style="max-width: 40%">
+                  <thead>
+                    <tr>
+                      <th scope="col">Number</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Count</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(item, index) in data" :key="index">
+                      <td>{{ item.id }}</td>
+                      <td>{{ item.name }}</td>
+                      <td>{{ item.price }}</td>
+                      <td>{{ item.count }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="col-md-6" style="text-align: end">
+                  <div class="text-right col-md-12">
+                    รวม {{ countAllBooks() }} เล่ม
+                  </div>
+                  <div class="text-right col-md-12">
+                    ราคาร่วม {{ sumprice() }} บาท
+                  </div>
+                  <div class="text-right col-md-12">
+                    ส่วนลด {{ discount() }} บาท
+                  </div>
+                  <div class="text-right col-md-12">
+                    ร่วมสุทธิ {{ sumprice() - discount() }} บาท
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -122,11 +131,13 @@ export default defineComponent({
   components: { bookstore },
   setup() {
     const data = reactive([]);
+    //  นับitemที่ซื้อและขาย
     function buyitem(item) {
       data.push(item);
       console.log(data[0]);
       console.log(item);
     }
+    //  รวมราคา
     function sumprice() {
       let price = 0;
       let count = 0;
@@ -136,12 +147,13 @@ export default defineComponent({
       });
       return price;
     }
-
+    // นับจำนวนหนังสือ
     function countAllBooks() {
       let books = 0;
       data.forEach((e) => (books += Number.parseInt(e.count)));
       return books;
     }
+    // หาจำนวนที่น้อยที่สุด
     function minDuplicateBooks() {
       let min = Number.MAX_SAFE_INTEGER;
       data.forEach((e) => {
@@ -149,6 +161,7 @@ export default defineComponent({
       });
       return min;
     }
+    //  จำนวนส่วนลด
     function discount() {
       let discount = 0;
       const uniqueSubjectCount = data.length;
